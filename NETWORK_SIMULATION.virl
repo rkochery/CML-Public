@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.95" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.95/virl.xsd">
+    <node name="BB-RTR-001" type="SIMPLE" subtype="IOSvL2" location="258,185" excludeFromLaunch="true">
+        <extensions>
+            <entry key="config" type="String">
+no service pad
+no service compress-config
+service tcp-keepalives-in
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service linenumber
+no service compress-config
+service sequence-numbers
+!
+hostname BB-RTR-001
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 64000 warnings
+enable password 0 PASSWORD
+!
+username admin privilege 0 password 0 PASSWORD
+!
+!
+!
+!
+!
+no ip source-route
+ip dhcp bootp ignore
+!
+!
+login block-for 1 attempts 3 within 60
+login on-failure log
+login on-success log
+vtp mode transparent
+udld aggressive
+
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+spanning-tree vlan 13,261,280-284,287-288,290-291,293,298,400-401 priority 4096
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+vlan dot1q tag native 
+!
+vlan 13
+!
+vlan 261
+!
+vlan 280
+!
+vlan 281
+!
+vlan 282
+!
+vlan 283
+!
+vlan 284
+!
+vlan 287
+!
+vlan 288
+!
+vlan 290
+!
+vlan 293
+ remote-span
+!
+vlan 298
+!
+vlan 400
+!
+vlan 999
+ name No_Device
+!
+ip tcp synwait-time 10
+ip ssh time-out 60
+ip ssh version 2
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 204.11.67.249 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description "No_Device"
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet1/0
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,287,288,290,293,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ srr-queue bandwidth share 1 15 50 35
+ priority-queue out 
+!
+interface GigabitEthernet1/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280,281,283,284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet1/2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet2/0
+ switchport access vlan 288
+ switchport mode access
+!
+interface GigabitEthernet1/3
+ switchport access vlan 287
+ switchport mode access
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan261
+ ip address 204.11.71.2 255.255.255.0
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 61 ip 204.11.71.1
+ standby 61 priority 110
+ standby 61 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 1322473C2B1A1D083E3D0B133B7157
+!
+interface Vlan280
+ ip address 204.11.69.2 255.255.255.0
+ ip access-group ipv4-outbound-from-management in
+ ip access-group ipv4-inbound-to-management out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 80 ip 204.11.69.1
+ standby 80 priority 110
+ standby 80 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 06215F0F6C58103B100E312B02576E
+!
+interface Vlan281
+ ip address 204.11.73.2 255.255.255.0
+ ip access-group ipv4-inbound-to-application out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 81 ip 204.11.73.1
+ standby 81 priority 110
+ standby 81 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 047C5B282F37556C1C0026371C5848
+!
+interface Vlan282
+ ip address 204.11.70.2 255.255.255.0
+ ip helper-address 204.11.73.8
+ ip helper-address 204.11.73.9
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 82 ip 204.11.70.1
+ standby 82 priority 110
+ standby 82 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 1069593725010B29191D090B2A7B77
+!
+interface Vlan283
+ ip address 204.11.67.2 255.255.255.128
+ ip helper-address 204.11.73.8
+ ip helper-address 204.11.73.9
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 83 ip 204.11.67.1
+ standby 83 priority 110
+ standby 83 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 112E492B3704122E11330804266071
+!
+interface Vlan284
+ ip address 204.11.67.130 255.255.255.192
+ ip access-group ipv4-inbound-printer-access out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 84 ip 204.11.67.129
+ standby 84 priority 110
+ standby 84 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 00234328244D12241A386F6E074A41
+!
+interface Vlan287
+ ip address 204.11.67.203 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ ip ospf message-digest-key 1 md5 7 072871626E1F0027020B282C0A796F
+!
+interface Vlan288
+ ip address 204.11.67.241 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+!
+interface Vlan290
+ ip address 204.11.67.218 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 90 ip 204.11.67.217
+ standby 90 priority 110
+ standby 90 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 052C5621015A572B0C1C3432055F40
+ shutdown
+!
+interface Vlan298
+ ip address 171.15.172.2 255.255.252.0
+ ip access-group ipv4-inbound-to-provisioning in
+ ip access-group ipv4-outbound-from-provisioning out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 98 ip 171.15.172.1
+ standby 98 priority 110
+ standby 98 preempt delay minimum 180
+!
+interface Vlan400
+ ip address 9.31.200.85 255.255.255.248
+ standby 240 ip 9.31.200.82
+ standby 240 priority 90
+ standby 240 preempt delay minimum 180
+!
+router ospf 1
+ area 204.11.64.0 authentication message-digest
+ area 204.11.64.0 stub
+ network 204.11.67.0 0.0.0.127 area 204.11.64.0
+ network 204.11.67.128 0.0.0.63 area 204.11.64.0
+ network 204.11.67.200 0.0.0.7 area 204.11.64.0
+ network 204.11.67.249 0.0.0.0 area 204.11.64.0
+ network 204.11.69.0 0.0.0.255 area 204.11.64.0
+ network 204.11.70.0 0.0.0.255 area 204.11.64.0
+ network 204.11.71.0 0.0.0.255 area 204.11.64.0
+ network 204.11.73.0 0.0.0.255 area 204.11.64.0
+!
+!
+no ip http server
+no ip http secure-server
+!
+ip pim rp-address 204.11.73.2
+ip route 9.31.200.32 255.255.255.224 9.31.200.81
+ip route 9.31.200.32 255.255.255.240 204.11.71.252
+ip route 127.243.115.0 255.255.255.0 204.11.71.250
+ip route 127.243.115.0 255.255.255.0 204.11.71.252
+ip route 191.167.101.0 255.255.255.0 204.11.71.250
+ip route 191.167.101.0 255.255.255.0 204.11.71.252
+ip route 204.11.71.192 255.255.255.240 9.31.200.81
+!
+!
+ip radius source-interface Loopback0 
+logging facility local6
+logging source-interface Loopback0
+logging host 204.11.69.7
+!
+!
+snmp-server group SNMPgroup v3 auth read SNMPview access ipv4-network-management
+snmp-server view SNMPview internet included
+snmp-server view SNMPview mib-2 included
+snmp-server view SNMPview system included
+snmp-server view SNMPview cisco included
+snmp-server trap-source Loopback0
+snmp-server source-interface informs Loopback0
+snmp-server enable traps tty
+!
+line con 0
+ logging synchronous
+line vty 0 4
+ access-class ipv4-terminal-access in 
+ logging synchronous
+ login local
+ transport input ssh
+ transport output none
+line vty 5 15
+ access-class ipv4-terminal-access in
+ logging synchronous
+ login
+ transport input ssh
+ transport output none
+ntp authentication-key 1 md5 055D535A7218 7
+ntp authenticate
+ntp trusted-key 1
+ntp source Loopback0
+ntp server 204.11.69.18 key 1
+crypto key generate rsa modulus 1024
+username admin privilege 15 password 0 PASSWORD
+no banner exec
+no banner incoming
+</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+        <interface id="6" name="GigabitEthernet1/3"/>
+        <interface id="7" name="GigabitEthernet2/0"/>
+        <interface id="8" name="GigabitEthernet2/1"/>
+        <interface id="9" name="GigabitEthernet2/2"/>
+        <interface id="10" name="GigabitEthernet2/3"/>
+        <interface id="11" name="GigabitEthernet3/0"/>
+        <interface id="12" name="GigabitEthernet3/1"/>
+        <interface id="13" name="GigabitEthernet3/2"/>
+        <interface id="14" name="GigabitEthernet3/3"/>
+    </node>
+    <node name="BB-RTR-002" type="SIMPLE" subtype="IOSvL2" location="582,189" excludeFromLaunch="true">
+        <extensions>
+            <entry key="config" type="String">
+no service pad
+service tcp-keepalives-in
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service linenumber
+no service compress-config
+service sequence-numbers
+!
+hostname BB-RTR-002
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 64000 warnings
+enable password 0 PASSWORD
+!
+username admin privilege 0 password 0 PASSWORD 
+!
+!
+!
+no ip source-route
+ip routing
+!
+ip dhcp bootp ignore
+!
+!
+ip name-server 204.11.73.6
+ip name-server 204.11.73.7
+login block-for 1 attempts 3 within 60
+login on-failure log
+login on-success log
+vtp mode transparent
+udld aggressive
+
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+spanning-tree vlan 13,281,287-288,293,298 priority 8192
+spanning-tree vlan 261,280,282-284,290-291,400-401 priority 4096
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+vlan dot1q tag native 
+!
+vlan 13
+!
+vlan 261
+!
+vlan 280
+!
+vlan 281
+!
+vlan 282
+!
+vlan 283
+!
+vlan 284
+!
+vlan 287
+!
+vlan 288
+!
+vlan 290
+!
+vlan 293
+ remote-span
+!
+vlan 298
+!
+vlan 400
+!
+vlan 999
+ name No_Device
+!
+ip tcp synwait-time 10
+ip ssh time-out 60
+ip ssh version 2
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 204.11.67.250 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description "No_Device"
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet1/0
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,287,288,290,293,298,400,401
+ switchport mode trunk
+ switchport nonegotiate
+ srr-queue bandwidth share 1 15 50 35
+ priority-queue out 
+!
+interface GigabitEthernet1/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280,281,283,284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet1/2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet2/0
+ switchport access vlan 288
+ switchport mode access
+!
+interface GigabitEthernet1/3
+ switchport access vlan 287
+ switchport mode access
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan261
+ ip address 204.11.71.3 255.255.255.0
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 61 ip 204.11.71.1
+ standby 61 priority 120
+ standby 61 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 15355B22243C32063D2A16021D5452
+!
+interface Vlan280
+ ip address 204.11.69.3 255.255.255.0
+ ip access-group ipv4-outbound-from-management in
+ ip access-group ipv4-inbound-to-management out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 80 ip 204.11.69.1
+ standby 80 priority 90
+ standby 80 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 1322473C2B1A1D083E3D0B133B7157
+!
+interface Vlan281
+ ip address 204.11.73.3 255.255.255.0
+ ip access-group ipv4-inbound-to-application out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 81 ip 204.11.73.1
+ standby 81 priority 90
+ standby 81 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 072871626E1F0027020B282C0A796F
+!
+interface Vlan282
+ ip address 204.11.70.3 255.255.255.0
+ ip helper-address 204.11.73.8
+ ip helper-address 204.11.73.9
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 82 ip 204.11.70.1
+ standby 82 priority 90
+ standby 82 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 0134562A7B1D1F2D34556D29175653
+!
+interface Vlan283
+ ip address 204.11.67.3 255.255.255.128
+ ip helper-address 204.11.73.8
+ ip helper-address 204.11.73.9
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 83 ip 204.11.67.1
+ standby 83 priority 90
+ standby 83 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 03230B252619386E5B103A2519414F
+!
+interface Vlan284
+ ip address 204.11.67.131 255.255.255.192
+ ip access-group ipv4-inbound-printer-access out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 84 ip 204.11.67.129
+ standby 84 priority 90
+ standby 84 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 1069593725010B29191D090B2A7B77
+!
+interface Vlan287
+ ip address 204.11.67.204 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ ip ospf message-digest-key 1 md5 7 08061C60290F1C3507122F24247860
+!
+interface Vlan288
+ ip address 204.11.67.242 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+!
+interface Vlan290
+ ip address 204.11.67.219 255.255.255.248
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 90 ip 204.11.67.217
+ standby 90 priority 90
+ standby 90 preempt delay minimum 180
+ ip ospf message-digest-key 1 md5 7 1322473C2B1A1D083E3D0B133B7157
+ shutdown
+!
+interface Vlan298
+ ip address 171.15.172.3 255.255.252.0
+ ip access-group ipv4-inbound-to-provisioning in
+ ip access-group ipv4-outbound-from-provisioning out
+ ip pim neighbor-filter pim-neighbors
+ ip pim sparse-mode
+ standby 98 ip 171.15.172.1
+ standby 98 priority 90
+ standby 98 preempt delay minimum 180
+!
+interface Vlan400
+ ip address 9.31.200.86 255.255.255.248
+ standby 240 ip 9.31.200.82
+ standby 240 priority 110
+ standby 240 preempt delay minimum 180
+!
+router ospf 1
+ area 204.11.64.0 authentication message-digest
+ area 204.11.64.0 stub
+ network 204.11.67.0 0.0.0.127 area 204.11.64.0
+ network 204.11.67.128 0.0.0.63 area 204.11.64.0
+ network 204.11.67.200 0.0.0.7 area 204.11.64.0
+ network 204.11.67.250 0.0.0.0 area 204.11.64.0
+ network 204.11.69.0 0.0.0.255 area 204.11.64.0
+ network 204.11.70.0 0.0.0.255 area 204.11.64.0
+ network 204.11.71.0 0.0.0.255 area 204.11.64.0
+ network 204.11.73.0 0.0.0.255 area 204.11.64.0
+!
+!
+no ip http server
+no ip http secure-server
+ip pim rp-address 204.11.73.3
+ip route 9.31.200.32 255.255.255.224 9.31.200.81
+ip route 9.31.200.32 255.255.255.240 204.11.71.252
+ip route 127.243.115.0 255.255.255.0 204.11.71.250
+ip route 127.243.115.0 255.255.255.0 204.11.71.252
+ip route 191.167.101.0 255.255.255.0 204.11.71.250
+ip route 191.167.101.0 255.255.255.0 204.11.71.252
+ip route 204.11.71.192 255.255.255.240 9.31.200.81
+!
+!
+ip radius source-interface Loopback0 
+logging facility local6
+logging source-interface Loopback0
+logging host 204.11.69.7
+!
+!
+snmp-server group SNMPgroup v3 auth read SNMPview access ipv4-network-management
+snmp-server view SNMPview internet included
+snmp-server view SNMPview mib-2 included
+snmp-server view SNMPview system included
+snmp-server view SNMPview cisco included
+snmp-server trap-source Loopback0
+snmp-server source-interface informs Loopback0
+snmp-server enable traps tty
+!DTE COMMENT: START
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line vty 0 4
+ access-class ipv4-terminal-access in 
+ logging synchronous
+ login local
+ transport input ssh
+ transport output none
+line vty 5 15
+ access-class ipv4-terminal-access in
+ logging synchronous
+ login
+ transport input ssh
+ transport output none
+!
+ntp authentication-key 1 md5 040D5E535C75 7
+ntp authenticate
+ntp trusted-key 1
+ntp source Loopback0
+ntp server 204.11.69.18 key 1
+crypto key generate rsa modulus 1024
+username admin privilege 15 password 0 PASSWORD
+no banner exec
+no banner incoming
+ip forward-protocol nd
+</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+        <interface id="6" name="GigabitEthernet1/3"/>
+        <interface id="7" name="GigabitEthernet2/0"/>
+        <interface id="8" name="GigabitEthernet2/1"/>
+        <interface id="9" name="GigabitEthernet2/2"/>
+        <interface id="10" name="GigabitEthernet2/3"/>
+        <interface id="11" name="GigabitEthernet3/0"/>
+        <interface id="12" name="GigabitEthernet3/1"/>
+        <interface id="13" name="GigabitEthernet3/2"/>
+        <interface id="14" name="GigabitEthernet3/3"/>
+    </node>
+    <node name="DC-SW-005" type="SIMPLE" subtype="IOSvL2" location="255,364" excludeFromLaunch="true">
+        <extensions>
+            <entry key="config" type="String">   
+no service pad
+service tcp-keepalives-in
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service linenumber
+no service compress-config
+service sequence-numbers
+!
+hostname DC-SW-005
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 64000 warnings
+logging console informational
+enable password 0 PASSWORD
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip source-route
+ip dhcp bootp ignore
+!
+!
+ip name-server 204.11.73.6
+ip name-server 204.11.73.7
+login block-for 1 attempts 3 within 60
+login on-failure log
+login on-success log
+vtp mode transparent
+udld aggressive
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+vlan dot1q tag native 
+!
+vlan 13
+!
+vlan 261
+!
+vlan 280
+!
+vlan 281
+!
+vlan 283
+!
+vlan 284
+!
+vlan 290
+!
+vlan 293
+ remote-span
+!
+vlan 298
+!
+vlan 999
+!
+ip tcp synwait-time 10
+ip ssh time-out 60
+ip ssh version 2
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/1
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 261,280,281,283,284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/2
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280,281,283,284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/3
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280,281,283,284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/0
+ description "No_Device"
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet3/3
+ switchport access vlan 280
+ switchport mode access
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan280
+ ip address 204.11.69.4 255.255.255.0
+!
+ip default-gateway 204.11.69.1
+no ip http server
+no ip http secure-server
+!
+!
+line con 0
+ logging synchronous
+line vty 0 4
+ access-class ipv4-terminal-access in 
+ logging synchronous
+ login local
+ transport input ssh
+ transport output none
+line vty 5 15
+ access-class ipv4-terminal-access in
+ logging synchronous
+ login
+ transport input ssh
+ transport output none
+ntp authentication-key 1 md5 0250510E5852 7
+ntp authenticate
+ntp trusted-key 1
+ntp source Vlan280
+ntp server 204.11.69.18 key 1
+crypto key generate rsa modulus 1024
+username admin privilege 15 password 0 PASSWORD
+no banner exec
+no banner incoming
+ip forward-protocol nd
+</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+        <interface id="6" name="GigabitEthernet1/3"/>
+        <interface id="7" name="GigabitEthernet2/0"/>
+        <interface id="8" name="GigabitEthernet2/1"/>
+        <interface id="9" name="GigabitEthernet2/2"/>
+        <interface id="10" name="GigabitEthernet2/3"/>
+        <interface id="11" name="GigabitEthernet3/0"/>
+        <interface id="12" name="GigabitEthernet3/1"/>
+        <interface id="13" name="GigabitEthernet3/2"/>
+        <interface id="14" name="GigabitEthernet3/3"/>
+    </node>
+    <node name="DC-SW-006" type="SIMPLE" subtype="IOSvL2" location="595,351" excludeFromLaunch="true">
+        <extensions>
+            <entry key="config" type="String">
+no service pad
+service tcp-keepalives-in
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service linenumber
+no service compress-config
+service sequence-numbers
+!
+hostname DC-SW-006
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 64000 warnings
+logging console informational
+enable password 0 PASSWORD
+!
+username admin privilege 0 password 0 PASSWORD
+!
+!
+!
+!
+!
+!
+!
+!
+no ip source-route
+ip dhcp bootp ignore
+!
+!
+ip name-server 204.11.73.6
+ip name-server 204.11.73.7
+login block-for 1 attempts 3 within 60
+login on-failure log
+login on-success log
+vtp mode transparent
+udld aggressive
+
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+vlan dot1q tag native 
+!
+vlan 13
+!
+vlan 261
+!
+vlan 280
+!
+vlan 281
+!
+vlan 282
+!
+vlan 283
+!
+vlan 284
+!
+vlan 290
+!
+vlan 293
+ remote-span
+!
+vlan 298
+!
+vlan 999
+ name No_Device
+!
+ip tcp synwait-time 10
+ip ssh time-out 60
+ip ssh version 2
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/1
+ switchport access vlan 281
+ switchport mode access
+!
+interface GigabitEthernet0/2
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/3
+ switchport access vlan 999
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 13
+ switchport trunk allowed vlan 261,280-284,290,293,298
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/0
+ description "No_Device"
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan280
+ ip address 204.11.69.5 255.255.255.0
+!
+ip default-gateway 204.11.69.1
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip radius source-interface Vlan280 
+logging facility local6
+logging source-interface Vlan280
+logging host 204.11.69.7
+!
+snmp-server group SNMPgroup v3 auth read SNMPview access ipv4-network-management
+snmp-server view SNMPview internet included
+snmp-server view SNMPview mib-2 included
+snmp-server view SNMPview system included
+snmp-server view SNMPview cisco included
+snmp-server trap-source Vlan280
+snmp-server source-interface informs Vlan280
+snmp-server enable traps tty
+!
+!
+!
+!
+line con 0
+!DTE COMMENT: START
+ logging synchronous
+line vty 0 4
+ access-class ipv4-terminal-access in 
+ logging synchronous
+ login local
+ transport input ssh
+ transport output none
+line vty 5 15
+ access-class ipv4-terminal-access in
+ logging synchronous
+ login
+ transport input ssh
+ transport output none
+ntp authentication-key 1 md5 15445E59577E 7
+ntp authenticate
+ntp trusted-key 1
+ntp source Vlan280
+ntp server 204.11.69.18 key 1
+crypto key generate rsa modulus 1024
+username admin privilege 15 password 0 PASSWORD
+no banner exec
+no banner incoming
+ip forward-protocol nd
+</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+        <interface id="6" name="GigabitEthernet1/3"/>
+        <interface id="7" name="GigabitEthernet2/0"/>
+        <interface id="8" name="GigabitEthernet2/1"/>
+        <interface id="9" name="GigabitEthernet2/2"/>
+        <interface id="10" name="GigabitEthernet2/3"/>
+        <interface id="11" name="GigabitEthernet3/0"/>
+        <interface id="12" name="GigabitEthernet3/1"/>
+        <interface id="13" name="GigabitEthernet3/2"/>
+        <interface id="14" name="GigabitEthernet3/3"/>
+    </node>
+    <node name="trunk" type="ASSET" subtype="FLAT" location="251,498">
+        <extensions>
+            <entry key="host_network" type="String">flat409</entry>
+            <entry key="static_ip" type="String">10.10.9.5</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <node name="dte-401" type="ASSET" subtype="FLAT" location="616,504">
+        <extensions>
+            <entry key="host_network" type="String">flat401</entry>
+            <entry key="static_ip" type="String">10.10.1.5</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <annotations/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[4]" src="/virl:topology/virl:node[2]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[5]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[6]" src="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[5]" src="/virl:topology/virl:node[3]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[6]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[1]"/>
+</topology>
